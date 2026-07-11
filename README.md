@@ -67,13 +67,13 @@ A aplicação cobre três funcionalidades principais:
  
 Antes de rodar o projeto, instale:
  
-| Ferramenta | Versão recomendada | Link |
-|---|---|---|
-| .NET SDK | 8.0 ou superior | https://dotnet.microsoft.com/download |
-| Node.js | 18 ou superior (LTS) | https://nodejs.org |
-| MySQL Server | 8.0 ou superior | https://dev.mysql.com/downloads/mysql |
-| Ferramenta EF Core CLI | `dotnet-ef` (instalação abaixo) | — |
-| Editor | Visual Studio Code | https://code.visualstudio.com |
+| Ferramenta | Versão recomendada | 
+|---|---|
+| .NET SDK | 8.0 ou superior | 
+| Node.js | 18 ou superior (LTS) | 
+| MySQL Server | 8.0 ou superior | 
+| Ferramenta EF Core CLI | 
+| Editor | Visual Studio Code |
  
 ### Extensões recomendadas no VS Code
  
@@ -99,12 +99,6 @@ globalmente para aplicá-las ao banco:
  
 ```bash
 dotnet tool install --global dotnet-ef
-```
- 
-Se já tiver instalada, garanta que está atualizada:
- 
-```bash
-dotnet tool update --global dotnet-ef
 ```
  
 ---
