@@ -107,51 +107,51 @@ dotnet tool install --global dotnet-ef
  
 ```
 Controle_de_Gastos_Residencial/
-├── ControleGastos.sln                  # Solution do back-end
+├── ControleGastos.sln                  
 │
-├── ControleGastos.API/                 # Projeto da API (.NET 8)
+├── ControleGastos.API/                 
 │   ├── Controllers/
-│   │   ├── PessoasController.cs        # Endpoints de Pessoas (criar/listar/excluir)
-│   │   ├── TransacoesController.cs     # Endpoints de Transações (criar/listar)
-│   │   └── TotaisController.cs         # Endpoint de consulta de totais
+│   │   ├── PessoasController.cs        
+│   │   ├── TransacoesController.cs     
+│   │   └── TotaisController.cs         
 │   ├── Data/
-│   │   └── AppDbContext.cs             # Contexto do EF Core (mapeamento + cascade delete)
+│   │   └── AppDbContext.cs             
 │   ├── DTOs/
-│   │   ├── PessoaDto.cs                # Dados recebidos para cadastrar pessoa
-│   │   ├── TransacaoDto.cs             # Dados recebidos para cadastrar transação
-│   │   ├── TransacaoResponseDto.cs     # Dados retornados de uma transação (com nome da pessoa)
-│   │   └── TotaisDto.cs                # Dados retornados na consulta de totais
-│   ├── Migrations/                     # Histórico de migrations do EF Core
+│   │   ├── PessoaDto.cs                
+│   │   ├── TransacaoDto.cs             
+│   │   ├── TransacaoResponseDto.cs     
+│   │   └── TotaisDto.cs                
+│   ├── Migrations/                    
 │   ├── Models/
-│   │   ├── Pessoa.cs                   # Entidade Pessoa
-│   │   └── Transacao.cs                # Entidade Transacao
+│   │   ├── Pessoa.cs                  
+│   │   └── Transacao.cs                
 │   ├── Properties/
-│   │   └── launchSettings.json         # Configuração de porta/perfil de execução
-│   ├── appsettings.json                # String de conexão e configurações gerais
+│   │   └── launchSettings.json         
+│   ├── appsettings.json                
 │   ├── appsettings.Development.json
-│   ├── ControleGastos.API.csproj       # Definição do projeto e dependências (NuGet)
-│   ├── ControleGastos.API.http         # Requisições HTTP de exemplo para teste manual
-│   └── Program.cs                      # Ponto de entrada e configuração da aplicação
+│   ├── ControleGastos.API.csproj       
+│   ├── ControleGastos.API.http         
+│   └── Program.cs                      
 │
-├── frontend/                           # Projeto React + TypeScript (Vite)
+├── frontend/                           
 │   ├── public/
 │   ├── src/
 │   │   ├── api/
-│   │   │   └── api.ts                  # Instância do Axios (URL base da API)
+│   │   │   └── api.ts                 
 │   │   ├── components/
-│   │   │   ├── Pessoas.tsx             # Tela de cadastro/listagem de pessoas
-│   │   │   ├── Transacoes.tsx          # Tela de cadastro/listagem de transações
-│   │   │   └── Totais.tsx              # Tela de consulta de totais
+│   │   │   ├── Pessoas.tsx             
+│   │   │   ├── Transacoes.tsx          
+│   │   │   └── Totais.tsx              
 │   │   ├── styles/
-│   │   │   └── App.css                 # Estilização da aplicação
-│   │   ├── App.tsx                     # Componente raiz (junta as 3 telas)
-│   │   └── main.tsx                    # Ponto de entrada do React
+│   │   │   └── App.css                 
+│   │   ├── App.tsx                    
+│   │   └── main.tsx                    
 │   ├── index.html
-│   ├── package.json                    # Dependências e scripts do front-end
+│   ├── package.json                    
 │   ├── tsconfig.json / tsconfig.app.json / tsconfig.node.json
-│   └── vite.config.ts                  # Configuração do Vite
+│   └── vite.config.ts                 
 │
-└── README.md                           # Este arquivo
+└── README.md                           
 ```
  
 ---
@@ -311,59 +311,6 @@ incluído no projeto (compatível com a extensão *REST Client* do VS Code).
   todas as pessoas.
 ---
  
-## Decisões de arquitetura
- 
-- **Separação em DTOs**: as classes `Models` (`Pessoa`, `Transacao`) representam
-  as tabelas do banco, enquanto as classes em `DTOs` (`PessoaDto`,
-  `TransacaoDto`, `TransacaoResponseDto`, `TotaisDto`) representam os dados
-  trocados com o front-end. Isso evita expor diretamente a estrutura interna
-  do banco na API e permite formatar melhor as respostas (por exemplo,
-  incluir o nome da pessoa junto com a transação).
-- **Entity Framework Core (Code First + Migrations)**: as tabelas do MySQL são
-  geradas a partir das classes C# (`Pessoa` e `Transacao`), com o
-  relacionamento e a exclusão em cascata configurados via Fluent API no
-  `AppDbContext`. As alterações no modelo ficam registradas na pasta
-  `Migrations`, permitindo recriar a estrutura do banco em qualquer máquina
-  apenas rodando `dotnet ef database update`.
-- **Persistência real em banco de dados**: diferente de um armazenamento em
-  memória, os dados ficam gravados no MySQL, portanto continuam disponíveis
-  mesmo após reiniciar a API ou o computador.
-- **CORS liberado para o front-end**: a API está configurada com uma política
-  de CORS (`"React"`) que permite chamadas de qualquer origem, viabilizando a
-  comunicação entre o front-end (porta `5173`) e a API (porta `5282`) durante
-  o desenvolvimento.
-- **Componentização no front-end**: cada funcionalidade (Pessoas, Transações,
-  Totais) é isolada em seu próprio componente React, cada um responsável por
-  buscar e gerenciar seus próprios dados via a instância central do Axios
-  (`src/api/api.ts`).
-- **Swagger habilitado em desenvolvimento**: facilita testar e validar os
-  endpoints da API sem depender do front-end.
----
- 
-## Testes automatizados
- 
-O projeto **não possui testes automatizados** (unitários ou de integração)
-implementados até o momento. A validação dos endpoints pode ser feita
-manualmente através do Swagger (`/swagger`) ou do arquivo
-`ControleGastos.API.http`.
- 
----
- 
-## Observações de segurança
- 
-O arquivo `appsettings.json` deste projeto contém a string de conexão com o
-MySQL, incluindo usuário e senha em texto plano. Isso é aceitável para fins de
-estudo/teste técnico local, mas **não é uma prática recomendada para
-projetos reais ou repositórios públicos**. Para um cenário de produção, o
-recomendado seria:
- 
-- Utilizar o **User Secrets** do .NET em desenvolvimento
-  (`dotnet user-secrets`), ou
-- Utilizar **variáveis de ambiente** para armazenar a connection string, e
-- Adicionar `appsettings.json` (ou apenas a seção de credenciais) ao
-  `.gitignore`, versionando apenas um `appsettings.Example.json` com valores
-  fictícios.
----
  
 ## Autor
  
